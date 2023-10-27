@@ -1,9 +1,11 @@
 <template>
-    <div class="lds-ellipsis">
-        <div />
-        <div />
-        <div />
-        <div />
+    <div class="lds-ellipsis-container">
+        <div class="lds-ellipsis">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
     </div>
 </template>
 
@@ -13,10 +15,18 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-.lds-ellipsis {
-    display: inline-block;
+<style scoped>
+.lds-ellipsis-container {
     position: relative;
+    width: 100%; /* Ширина 100% для центрирования по горизонтали */
+    height: 100vh; /* Высота 100vh для центрирования по вертикали */
+}
+
+.lds-ellipsis {
+    position: absolute;
+    top: 50%; /* Положение по вертикали в середине */
+    left: 50%; /* Положение по горизонтали в середине */
+    transform: translate(-50%, -50%); /* Центрирование */
     width: 80px;
     height: 80px;
 }
@@ -24,10 +34,10 @@ export default {
 .lds-ellipsis div {
     position: absolute;
     top: 33px;
-    width: 13px;
-    height: 13px;
+    width: 18px;
+    height: 18px;
     border-radius: 50%;
-    background: var(--inverted-bg-color);
+    background: #99F538AD;
     animation-timing-function: cubic-bezier(0, 1, 1, 0);
 }
 

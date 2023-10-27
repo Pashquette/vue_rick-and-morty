@@ -1,14 +1,14 @@
 <template>
-    <div class="character-card">
-        <div class="character-card-inner">
-            <div class="character-image">
+    <div class="charItem__container" @click="openModal">
+        <div class="charItem__inner">
+            <div class="charItem__image">
                 <img :src="character.image" :alt="character.name" />
             </div>
-            <div class="character-details">
+            <div class="charItem__details">
                 <h2>{{ character.name }}</h2>
-                <p class="character-info">Пол: {{ character.gender }}</p>
-                <p class="character-info">Статус: {{ character.status }}</p>
-                <p class="character-info">Локация: {{ character.location.name }}</p>
+                <p class="charItem__info">Пол: {{ character.gender }}</p>
+                <p class="charItem__info">Статус: <span :class="statusClass">{{ character.status }}</span></p>
+                <p class="charItem__info">Локация: {{ character.location.name }}</p>
             </div>
         </div>
     </div>
@@ -17,42 +17,55 @@
 <script>
 export default {
     props: {
-        characters: {
-            type: Array,
+        character: {
+            type: Object,
             required: true
+        }
+    },
+    computed: {
+        statusClass() {
+            if (this.character.status === 'Alive') {
+                return 'alive-status';
+            } else if (this.character.status === 'Dead') {
+                return 'dead-status';
+            } else {
+                return 'default-status';
+            }
+        }
+    },
+    methods: {
+        openModal() {
+            this.$emit("open-modal", this.character);
         }
     }
 }
 </script>
 
 <style scoped>
-    /* Стили для character-card (каждой карточки) */
-    .character-card {
+    .charItem__container {
         border: 1px solid #4d505c;
         border-radius: 15px;
         display: flex;
-        flex-direction: row;
         max-width: 100%;
         margin-bottom: 20px;
-    //box-shadow: 0 8px 16px rgba(153, 245, 56, 0.68);
         transition: transform 0.3s, box-shadow 0.3s;
     }
 
-    .character-card:hover {
+    .charItem__container:hover {
         cursor: pointer;
-        transform: translate(0, -10px); /* Поднимаем карточку вверх */
+        transform: translate(0, -10px);
         box-shadow: 0 8px 16px rgba(153, 245, 56, 0.68);
     }
 
-    .character-card-inner {
+    .charItem__inner {
         display: flex;
         flex-direction: row;
         justify-content: space-between;
-        min-height: 200px;
+        min-height: 0;
+        //padding: 20px 0;
     }
 
-    /* Остальные стили остаются без изменений */
-    .character-image {
+    .charItem__image {
         border-top-left-radius: 15px;
         border-bottom-left-radius: 15px;
 
@@ -60,16 +73,30 @@ export default {
         max-width: 100%;
         max-height: 200px;
     }
-    .character-image img {
+    .charItem__image img {
         max-height: 100%;
     }
 
-    .character-details {
-        flex: 1;
+    .charItem__details {
+        flex-grow: 1;
+        margin-top: 10px;
+        margin-left: 40px;
     }
 
-    .character-info {
+    .charItem__info {
         margin: 4px 0;
-        font-size: 14px;
+        font-size: 16px;
+    }
+
+    .alive-status {
+        color: #99F538AD;
+    }
+
+    .dead-status {
+        color: tomato;
+    }
+
+    .default-status {
+        color: #ffffff;
     }
 </style>

@@ -1,4 +1,4 @@
-# vue_test_project
+# Rick and Morty Vue project.
 
 ## Project setup
 ```
