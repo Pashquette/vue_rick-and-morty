@@ -1,17 +1,22 @@
 <template>
-    <div class="charModal__container" v-if="show" @click="closeModal">
-        <div class="charModal__content" @click.stop>
-            <div class="charModal__content_image">
-                <img :src="character.image" :alt="character.name" />
+    <div>
+        <div class="charModal__background" v-if="show"></div>
+        <div class="charModal__container" v-if="show"  @click="closeModal">
+            <div class="charModal__overlay">
+                <div class="charModal__content" @click.stop>
+                    <div class="charModal__content_image">
+                        <img :src="character.image" :alt="character.name" />
+                    </div>
+                    <div class="charModal__content_descr" v-if="character">
+                        <h2>{{ character.name }}</h2>
+                        <p><strong>Раса:</strong> {{ character.species }}</p>
+                        <p><strong>Пол:</strong> {{ character.gender }}</p>
+                        <p><strong>Статус:</strong> <span :class="statusClass">{{ character.status }}</span></p>
+                        <p><strong>Локация:</strong> {{ character.location.name }}</p>
+                    </div>
+                    <button @click="closeModal" class="charModal__close-btn"></button>
+                </div>
             </div>
-            <div class="charModal__content_descr" v-if="character">
-                <h2>{{ character.name }}</h2>
-                <p><strong>Раса:</strong> {{ character.species }}</p>
-                <p><strong>Пол:</strong> {{ character.gender }}</p>
-                <p><strong>Статус:</strong> <span :class="statusClass">{{ character.status }}</span></p>
-                <p><strong>Локация:</strong> {{ character.location.name }}</p>
-            </div>
-            <button @click="closeModal" class="charModal__close-btn"></button>
         </div>
     </div>
 </template>
@@ -24,6 +29,15 @@ export default {
             default: false
         },
         character: Object,
+    },
+    watch: {
+        show(newVal) {
+            if (newVal) {
+                this.preventScroll();
+            } else {
+                this.allowScroll();
+            }
+        }
     },
     computed: {
         statusClass() {
@@ -40,21 +54,41 @@ export default {
         closeModal() {
             this.$emit("close", false);
         },
+        preventScroll() {
+            document.body.style.overflow = "hidden";
+        },
+        allowScroll() {
+            document.body.style.overflow = "auto";
+        },
     },
 };
 </script>
 
 <style scoped>
-.charModal__container {
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: rgba(0, 0, 0, 0.5);
+.charModal__background {
     position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+
+.charModal__container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2000;
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.charModal__overlay {
+    background: transparent;
 }
 
 .charModal__content {
@@ -98,7 +132,7 @@ export default {
 }
 
 .default-status {
-    color: #2f2f2f
+    color: #2f2f2f;
 }
 
 .charModal__close-btn {
